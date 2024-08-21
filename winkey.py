@@ -1,6 +1,8 @@
 import random
 import string
 import os
+import urllib.request
+import hashlib
 from termcolor import colored
 
 def clear_screen():
@@ -37,6 +39,35 @@ def is_valid_key(key, version):
         return checksum_is_valid(key_no_hyphens)
     return False
 
+def check_for_updates():
+    clear_screen()
+    print(colored("Verificando por atualizações...", 'cyan'))
+    url = "https://raw.githubusercontent.com/Tekzy/Winkey/main/winkey.py"
+    
+    try:
+        # Download do script remoto
+        with urllib.request.urlopen(url) as response:
+            remote_code = response.read()
+        
+        # Leitura do código local
+        with open(__file__, 'rb') as file:
+            local_code = file.read()
+        
+        # Comparação dos códigos
+        if hashlib.md5(remote_code).hexdigest() == hashlib.md5(local_code).hexdigest():
+            print(colored("Seu script já está atualizado.", 'green'))
+        else:
+            print(colored("Uma nova versão está disponível. Atualizando...", 'yellow'))
+            with open(__file__, 'wb') as file:
+                file.write(remote_code)
+            print(colored("Atualização concluída. Execute novamente o script.", 'green'))
+            input(colored("Pressione Enter para sair...", 'yellow'))
+            exit()
+    except Exception as e:
+        print(colored(f"Erro ao verificar atualizações: {e}", 'red'))
+    
+    input(colored("Pressione Enter para voltar ao menu principal...", 'yellow'))
+
 def main():
     while True:
         clear_screen()
@@ -44,6 +75,7 @@ def main():
         print(colored("Selecione uma opção:", 'yellow'))
         print(colored("1. Gerar chaves de ativação", 'magenta'))
         print(colored("2. Verificar chave de ativação", 'magenta'))
+        print(colored("3. Buscar atualizações", 'magenta'))
         
         main_choice = input(colored("Digite o número da opção desejada: ", 'blue'))
         
@@ -59,6 +91,8 @@ def main():
                 print(colored("A chave é inválida.", 'red'))
             input(colored("Pressione Enter para voltar ao menu principal...", 'yellow'))
             continue
+        elif main_choice == '3':
+            check_for_updates()
         else:
             print(colored("Opção inválida. Tente novamente.", 'red'))
             input(colored("Pressione Enter para tentar novamente...", 'yellow'))
