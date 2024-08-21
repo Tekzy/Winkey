@@ -71,7 +71,7 @@ def check_for_updates():
 def main():
     while True:
         clear_screen()
-        print(colored("Bem-vindo ao gerador de chaves de ativação do Windows!", 'cyan'))
+        print(colored("Winkey V1.5", 'cyan'))
         print(colored("Selecione uma opção:", 'yellow'))
         print(colored("1. Gerar chaves de ativação", 'magenta'))
         print(colored("2. Verificar chave de ativação", 'magenta'))
